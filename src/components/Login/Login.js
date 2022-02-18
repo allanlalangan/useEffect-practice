@@ -55,7 +55,7 @@ const Login = (props) => {
       console.log('cleanup')
       clearTimeout(isFormValid)
     }
-  }, [enteredEmail, enteredPassword])
+  }, [emailIsValid, passwordIsValid])
 
   const emailChangeHandler = (event) => {
     dispatchForm({ type: formACTIONS.updateEnteredEmail, value: event.target.value})
@@ -67,7 +67,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(formState.enteredEmail, formState.enteredPassword);
+    props.onLogin(enteredEmail, enteredPassword);
   };
 
   return (
@@ -75,34 +75,34 @@ const Login = (props) => {
       <form onSubmit={submitHandler}>
         <div
           className={`${classes.control} ${
-            formState.emailIsValid === false ? classes.invalid : ''
+            emailIsValid === false ? classes.invalid : ''
           }`}
         >
           <label htmlFor="email">E-Mail</label>
           <input
             type="email"
             id="email"
-            value={formState.enteredEmail}
+            value={enteredEmail}
             onChange={emailChangeHandler}
             onBlur={emailChangeHandler}
           />
         </div>
         <div
           className={`${classes.control} ${
-            formState.passwordIsValid === false ? classes.invalid : ''
+            passwordIsValid === false ? classes.invalid : ''
           }`}
         >
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            value={formState.enteredPassword}
+            value={enteredPassword}
             onChange={passwordChangeHandler}
             onBlur={passwordChangeHandler}
           />
         </div>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} disabled={!formState.formIsValid}>
+          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
             Login
           </Button>
         </div>
