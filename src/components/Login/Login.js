@@ -6,7 +6,8 @@ import Button from '../UI/Button/Button';
 
 const formACTIONS = {
   updateEnteredEmail: 'updateEnteredEmail',
-  updateEnteredPassword: 'updateEnteredPassword'
+  updateEnteredPassword: 'updateEnteredPassword',
+  validateForm: 'validateForm'
 }
 
 function formReducer(state, action) {
@@ -16,15 +17,18 @@ function formReducer(state, action) {
         ...state,
         enteredEmail: action.value,
         emailIsValid: action.value.includes('@'),
-        formIsValid: state.emailIsValid && state.passwordIsValid
       };
     case formACTIONS.updateEnteredPassword :
       return {
         ...state,
         enteredPassword: action.value,
         passwordIsValid: action.value.length > 6,
-        formIsValid: state.passwordIsValid && state.emailIsValid
       };
+    case formACTIONS.validateForm :
+      return {
+        ...state,
+        formIsValid: state.passwordIsValid && state.emailIsValid ? true : false
+      }
     default: return state
   }
 }
@@ -39,18 +43,19 @@ const Login = (props) => {
   };
 
   const [formState, dispatchForm] = useReducer(formReducer, initialFormState);
+  const { enteredEmail, emailIsValid, enteredPassword, passwordIsValid, formIsValid } = formState
 
-  // useEffect(() => {
-  //   const isFormValid = setTimeout(() => {
-  //     console.log('validating form')
-  //     setFormIsValid(enteredEmail.trim().includes('@') && enteredPassword.trim().length > 6)
-  //   }, 500);
+  useEffect(() => {
+    const isFormValid = setTimeout(() => {
+      console.log('validating form')
+      dispatchForm({ type: formACTIONS.validateForm})
+    }, 500);
 
-  //   return () => {
-  //     console.log('cleanup')
-  //     clearTimeout(isFormValid)
-  //   }
-  // }, [enteredEmail, enteredPassword])
+    return () => {
+      console.log('cleanup')
+      clearTimeout(isFormValid)
+    }
+  }, [enteredEmail, enteredPassword])
 
   const emailChangeHandler = (event) => {
     dispatchForm({ type: formACTIONS.updateEnteredEmail, value: event.target.value})
