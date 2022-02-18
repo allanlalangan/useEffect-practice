@@ -4,21 +4,26 @@ import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
 
+const formACTIONS = {
+  updateEnteredEmail: 'updateEnteredEmail',
+  updateEnteredPassword: 'updateEnteredPassword'
+}
+
 function formReducer(state, action) {
   switch(action.type) {
-    case 'updateEnteredEmail' :
+    case formACTIONS.updateEnteredEmail :
       return {
         ...state,
         enteredEmail: action.value,
         emailIsValid: action.value.includes('@'),
         formIsValid: state.emailIsValid && state.passwordIsValid
       };
-    case 'updateEnteredPassword' :
+    case formACTIONS.updateEnteredPassword :
       return {
         ...state,
         enteredPassword: action.value,
         passwordIsValid: action.value.length > 6,
-        formIsValid: state.emailIsValid && state.passwordIsValid
+        formIsValid: state.passwordIsValid && state.emailIsValid
       };
     default: return state
   }
@@ -26,11 +31,11 @@ function formReducer(state, action) {
 
 const Login = (props) => {
   const initialFormState = {
-    formIsValid: '',
     enteredEmail: '',
     emailIsValid: null,
     enteredPassword: '',
-    passwordIsValid: null
+    passwordIsValid: null,
+    formIsValid: null
   };
 
   const [formState, dispatchForm] = useReducer(formReducer, initialFormState);
@@ -48,11 +53,11 @@ const Login = (props) => {
   // }, [enteredEmail, enteredPassword])
 
   const emailChangeHandler = (event) => {
-    dispatchForm({ type: 'updateEnteredEmail', value: event.target.value})
+    dispatchForm({ type: formACTIONS.updateEnteredEmail, value: event.target.value})
   };
 
   const passwordChangeHandler = (event) => {
-    dispatchForm({ type: 'updateEnteredPassword', value: event.target.value})
+    dispatchForm({ type: formACTIONS.updateEnteredPassword, value: event.target.value})
   };
 
   const submitHandler = (event) => {
